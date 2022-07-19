@@ -1,0 +1,25 @@
+﻿@model CoverType
+@{
+    ViewData["Title"] = "Remove";
+}
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2>Remove CoverType</h2>
+            <hr/>
+        </div>
+        <input asp-for="Name" hidden/>
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <button class="btn btn-primary" asp-controller="CoverType" asp-action="Index">Back</button>
+        <button type="submit" class="btn btn-danger">Remove</button>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+}
