@@ -8,3 +8,7 @@
 /BookShop/BookShop.Models/obj
 /BookShop/BookShopWeb/obj
 /BookShop/.vs/BookShop/FileContentIndex
+/BookShop/BookShopWeb/bin/Debug/net6.0
+/BookShop/BookShop.Utilities/bin/Debug/net6.0
+/BookShop/BookShop.Models/bin/Debug/net6.0
+/BookShop/BookShop.DataAcess/bin/Debug/net6.0

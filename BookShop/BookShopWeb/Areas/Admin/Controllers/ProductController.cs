@@ -57,8 +57,19 @@ namespace BookShopWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                productViewModel.Product.ImageUrl = AddImageToServer(file);
-                _unitOfWork.Product.Add(productViewModel.Product);
+                RemoveImageFromServer(productViewModel.Product.ImageUrl);
+                if(file!=null)
+                    productViewModel.Product.ImageUrl = AddImageToServer(file);
+                
+                if(productViewModel.Product.Id==0)
+                {
+                    _unitOfWork.Product.Add(productViewModel.Product);
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(productViewModel.Product);
+                }
+
                 _unitOfWork.Save();
                 TempData["success"] = "Product added Successfully";
                 return RedirectToAction("Index");
@@ -82,55 +93,25 @@ namespace BookShopWeb.Areas.Admin.Controllers
                 {
                     file.CopyTo(fileStream);
                 }
-                imagePath = Path.Combine(folderPath , fileName);
+                imagePath = Path.Combine("\\"+folderPath , fileName);
             }
 
             return imagePath;
         }
 
-        public IActionResult Edit(int id)
+        private void RemoveImageFromServer(string fileName)
         {
-            TempData["error"] = "Cover Type Not Found";
-            return NotFound();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Product product)
-        {
-            if (ModelState.IsValid)
+            if (!string.IsNullOrEmpty(fileName))
             {
-                _unitOfWork.Product.Update(product);
-                _unitOfWork.Save();
-                return RedirectToAction("Index");
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                var imagePath = Path.Combine(wwwRootPath, fileName.TrimStart('\\'));
+                if(System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
             }
-            return View(product);
         }
-
-        public IActionResult Delete(int id)
-        {
-            var coverType = _unitOfWork.CoverType.GetFirstOrDefault(p => p.Id == id);
-            if (coverType != null)
-            {
-                return View(coverType);
-            }
-            TempData["error"] = "Cover Type Not Found";
-            return NotFound();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Remove(product);
-                _unitOfWork.Save();
-                return RedirectToAction("Index");
-            }
-            return View(product);
-        }
-
+   
         #region API Calls
 
         [HttpGet]
@@ -138,6 +119,23 @@ namespace BookShopWeb.Areas.Admin.Controllers
         {
             var products=_unitOfWork.Product.GetAll(includeProperties: "Category");
             return  Json(new { Data=products});
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int? id)
+        {
+            var product = _unitOfWork.Product.GetFirstOrDefault(p => p.Id == id);
+            if (product == null)
+            {
+                return Json(new { Success = false,message="Product Not Available!" });
+            }   
+            else
+            {
+                RemoveImageFromServer(product.ImageUrl);
+                _unitOfWork.Product.Remove(product);
+                _unitOfWork.Save();
+                return Json(new { Success = true, message = "Product Removed Successfully!" });
+            }
         }
 
         #endregion

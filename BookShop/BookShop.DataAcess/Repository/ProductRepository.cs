@@ -30,6 +30,7 @@ namespace BookShop.DataAcess.Repository
                 productFromDb.ListPrice = product.ListPrice;
                 productFromDb.CategoryId = product.CategoryId;
                 productFromDb.CoverTypeId = product.CoverTypeId;
+                productFromDb.ImageUrl = product.ImageUrl;
             }
         }
     }
