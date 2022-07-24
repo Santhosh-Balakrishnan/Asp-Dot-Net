@@ -1,4 +1,5 @@
-﻿using BookShop.Models;
+﻿using BookShop.DataAcess.Repository.IRepository;
+using BookShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,15 +9,28 @@ namespace BookShopWeb.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUnitOfWork _unitOfWork;
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var products = _unitOfWork.Product.GetAll(includeProperties: "Category,CoverType");
+            return View(products);
+        }
+
+        public IActionResult Details(int? id)
+        {
+            var product= _unitOfWork.Product.GetFirstOrDefault(p=>p.Id==id,includeProperties:"Category,CoverType");
+            ShoppingCart shoppingCart = new()
+            {
+                Count = 1,
+                Product = product
+            };
+            return View(shoppingCart);
         }
 
         public IActionResult Privacy()
