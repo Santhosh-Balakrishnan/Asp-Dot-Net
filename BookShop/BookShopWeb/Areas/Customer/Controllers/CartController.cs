@@ -10,7 +10,8 @@ namespace BookShopWeb.Areas.Customer.Controllers
     [Area("Customer")]
     [Authorize]
     public class CartController : Controller
-    {//Added Comments
+    {
+        //Adding Comment in Cart Controller
         private readonly IUnitOfWork _unitOfWork;
         public ShoppingCartViewModel ShoppingCartVM { get; set; }
         public CartController(IUnitOfWork unitOfWork)
