@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace BookShop.Models
 {
+    /// <summary>
+    /// Order Details
+    /// </summary>
     public class OrderDetail
     {
         public int Id { get; set; }
