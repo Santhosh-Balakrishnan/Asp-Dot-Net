@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Company>
+@{
+    ViewData["Title"] = "Company Details";
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text">
+                Products
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+             <a class="btn btn-outline-success" asp-action="CompanyDetails">
+                 <i class="bi bi-plus-circle-dotted"></i>&nbsp; Create
+             </a>
+        </div>  
+    </div>
+    <br/>
+    <table id="companyTable" class="table table-bordered table-striped text-dark">
+           <thead>
+               <tr>
+                   <th> Nme </th>
+                   <th> Address </th>
+                   <th> City </th>
+                   <th> State </th>
+                   <th> PostalCode </th>
+                   <th> PhoneNumber </th>
+                   <th></th>
+               </tr>
+           </thead>
+    </table>
+</div>
+@section Scripts{
+    <script src="~/js/company.js"></script>
+}

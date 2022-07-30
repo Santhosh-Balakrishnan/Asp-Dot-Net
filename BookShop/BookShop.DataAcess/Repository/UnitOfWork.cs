@@ -17,11 +17,20 @@ namespace BookShop.DataAcess.Repository
             Category = new CategoryRepository(dbContext);
             CoverType = new CoverTypeRepository(dbContext);
             Product = new ProductRepository(dbContext);
+            Company = new CompanyRepository(dbContext);
+            ShoppingCart = new ShoppingCartRepository(dbContext);
+            ApplicationUser = new ApplicationUserRepository(dbContext);
+            OrderHeaderRepository = new OrderHeaderRepository(dbContext);
+            OrderDetailRepository = new OrderDetailRepository(dbContext);
         }
         public ICategoryRepository Category {get;private set;}
         public ICoverTypeRepository CoverType {get;private set;}
         public IProductRepository Product {get;private set;}
-
+        public ICompanyRepository Company {get;private set;}
+        public IShoppingCartRepository ShoppingCart {get;private set;}
+        public IApplicationUserRepository ApplicationUser { get; private set; }
+        public IOrderHeaderRepository OrderHeaderRepository { get;  private set; }
+        public IOrderDetailRepository OrderDetailRepository { get; private set; }
         public void Save()
         {
             applicationDbContext.SaveChanges();

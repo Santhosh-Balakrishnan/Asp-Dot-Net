@@ -21,9 +21,12 @@ namespace BookShop.DataAcess.Repository
             dbSet.Add(entity);
         }
 
-        public IEnumerable<T> GetAll(string? includeProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? expression = null, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+
+            if (expression != null)
+                query = dbSet.Where(expression);
             if (!string.IsNullOrEmpty(includeProperties))
                 query = AddForeignkeyProperties(includeProperties, query);
             return query.ToList();

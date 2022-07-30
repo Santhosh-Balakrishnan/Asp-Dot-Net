@@ -31,6 +31,7 @@ namespace BookShop.DataAcess.Repository
                 productFromDb.CategoryId = product.CategoryId;
                 productFromDb.CoverTypeId = product.CoverTypeId;
                 productFromDb.ImageUrl = product.ImageUrl;
+                dbContext.Products.Update(productFromDb);
             }
         }
     }
