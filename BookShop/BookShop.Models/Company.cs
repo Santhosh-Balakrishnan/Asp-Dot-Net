@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace BookShop.Models
 {
+    /// <summary>
+    /// Company Details
+    /// </summary>
     public class Company
     {
         [Key]
