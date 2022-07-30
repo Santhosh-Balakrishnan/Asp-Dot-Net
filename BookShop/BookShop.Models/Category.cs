@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BookShop.Models
 {
+    /// <summary>
+    /// Category
+    /// </summary>
     public class Category
     {
         [Key]
