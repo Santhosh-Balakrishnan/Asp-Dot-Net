@@ -29,5 +29,15 @@ namespace BookShop.DataAcess.Repository
                     orderHeader.PaymentStatus = paymentStatus;
             }
         }
+
+        public void UpdatePaymentStatus(int id, string sessionId, string paymentIntentId)
+        {
+            var orderHeader = dbContext.OrderHeaders.FirstOrDefault(o => o.Id == id);
+            if (orderHeader != null)
+            {
+                orderHeader.SessionId = sessionId;
+                orderHeader.PaymentIntentId = paymentIntentId;
+            }
+        }
     }
 }
