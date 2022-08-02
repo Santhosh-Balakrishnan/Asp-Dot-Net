@@ -88,7 +88,7 @@ namespace BookShopWeb.Areas.Customer.Controllers
             };
             UpdateOrderHeader(claim, ShoppingCartVM.OrderHeader);
             UpdateCartItemPrice(ShoppingCartVM);
-            return Payment(ShoppingCartVM);
+            return View(ShoppingCartVM);
         }
 
         private IActionResult Payment(ShoppingCartViewModel shoppingCartVM)
@@ -99,7 +99,7 @@ namespace BookShopWeb.Areas.Customer.Controllers
                 LineItems = new List<SessionLineItemOptions>(),
                 Mode = "payment",
                 SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={shoppingCartVM.OrderHeader.Id}",
-                CancelUrl = domain + "customer/cart/index",
+                CancelUrl = domain + "customer/cart/summary",
             };
             
             foreach (var item in ShoppingCartVM.Items)
@@ -108,7 +108,7 @@ namespace BookShopWeb.Areas.Customer.Controllers
                 {
                     PriceData=new SessionLineItemPriceDataOptions
                     {
-                        UnitAmount = (long)item.Price,
+                        UnitAmount = (long)item.Price * 100,
                         Currency = "inr",
                         ProductData=new SessionLineItemPriceDataProductDataOptions
                         {
@@ -127,29 +127,46 @@ namespace BookShopWeb.Areas.Customer.Controllers
             return new StatusCodeResult(303);
         }
 
-        //public IActionResult OrderConfirmation(int id)
-        //{
-        //    OrderHeader orderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(o => o.Id == id);
-        //    var service = new SessionService();
-        //    Session session = service.Get(orderHeader.SessionId);
+        public IActionResult OrderConfirmation(int id)
+        {
+            var orderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(o => o.Id == id);
+            if (orderHeader.PaymentStatus != PaymentStatus.ApprovedForDelayedPayment.ToString())
+            {
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.SessionId);
 
-        //    if(session.PaymentStatus.ToLower()=="paid")
-        //    {
-        //        _unitOfWork.OrderHeaderRepository.UpdateOrderStatus(id, OrderStatus.Approved.ToString(), PaymentStatus.Approved.ToString());
-        //        _unitOfWork.Save();
-        //    }
-        //}
+                if (session.PaymentStatus.ToLower() == "paid")
+                {
+                    _unitOfWork.OrderHeaderRepository.UpdateOrderStatus(id, OrderStatus.Approved.ToString(), PaymentStatus.Approved.ToString());
+                    _unitOfWork.Save();
+                }
+            }
+            var shoppingCarts = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == orderHeader.ApplicationUserId);
+            _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+            _unitOfWork.Save();
+            return View(id);
+        }
 
         [HttpPost]
-        [ActionName("Summary")]
+        [ActionName("OrderSummary")]
         [ValidateAntiForgeryToken]
         public IActionResult OrderSummary()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             ShoppingCartVM.Items = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == claim.Value, includeProperties: "Product");
-            ShoppingCartVM.OrderHeader.PaymentStatus = PaymentStatus.Pending.ToString();
-            ShoppingCartVM.OrderHeader.OrderStatus = OrderStatus.Pending.ToString();
+            var applicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(u => u.Id == claim.Value);
+            if (applicationUser.CompanyId.GetValueOrDefault() == 0)
+            {
+                ShoppingCartVM.OrderHeader.PaymentStatus = PaymentStatus.Pending.ToString();
+                ShoppingCartVM.OrderHeader.OrderStatus = OrderStatus.Pending.ToString();
+            }
+            else
+            {
+                ShoppingCartVM.OrderHeader.PaymentStatus = PaymentStatus.ApprovedForDelayedPayment.ToString();
+                ShoppingCartVM.OrderHeader.OrderStatus = OrderStatus.Approved.ToString();
+            }
+            
             ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
             ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
              UpdateCartItemPrice(ShoppingCartVM);
@@ -168,8 +185,15 @@ namespace BookShopWeb.Areas.Customer.Controllers
                 _unitOfWork.OrderDetailRepository.Add(orderDetail);
                 _unitOfWork.Save();
             }
-            _unitOfWork.ShoppingCart.RemoveRange(ShoppingCartVM.Items);
-            return RedirectToAction("Index","Home");
+            
+            if (applicationUser.CompanyId.GetValueOrDefault() == 0)
+            {
+                return Payment(ShoppingCartVM);
+            }
+            else
+            {
+                return RedirectToAction("OrderConfirmation","Cart",new {id=ShoppingCartVM.OrderHeader.Id});
+            }
         }
         private void UpdateOrderHeader(Claim claim,OrderHeader orderHeader)
         {
