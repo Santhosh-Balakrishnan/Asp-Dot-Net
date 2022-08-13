@@ -21,7 +21,7 @@ namespace BookShop.DataAcess.Repository
             dbSet.Add(entity);
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? expression = null, string? includeProperties = null)
+        public virtual IEnumerable<T> GetAll(Expression<Func<T, bool>>? expression = null, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
 
@@ -32,9 +32,18 @@ namespace BookShop.DataAcess.Repository
             return query.ToList();
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> expression, string? includeProperties = null)
+        public T GetFirstOrDefault(Expression<Func<T, bool>> expression, string? includeProperties = null,bool tracked=true)
         {
-            IQueryable<T> query=dbSet.Where(expression);
+            IQueryable<T> query;
+            if (tracked)
+            {
+                query = dbSet;
+            }
+            else
+            {
+                query = dbSet.AsNoTracking();
+            }
+            query = query.Where(expression);
             if (!string.IsNullOrEmpty(includeProperties))
                 query = AddForeignkeyProperties(includeProperties, query);
             return query.FirstOrDefault<T>();
