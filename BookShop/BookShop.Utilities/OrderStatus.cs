@@ -12,7 +12,6 @@ namespace BookShop.Utilities
         Approved,
         Processing,
         Shipped ,
-        Cancelled,
-        Refunded
+        Cancelled
     }
 }

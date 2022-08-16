@@ -1,10 +1,13 @@
 ﻿using BookShop.DataAcess.Repository.IRepository;
 using BookShop.Models;
+using BookShop.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookShopWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public class CoverTypeController : Controller
     {
         IUnitOfWork _unitOfWork;

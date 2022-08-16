@@ -252,7 +252,7 @@
 									asp-action="ShipOrder" class="btn btn-primary form-control my-1" value="Ship Order" />
 								}
 								
-								@if (Model.OrderHeader.OrderStatus != OrderStatus.Refunded.ToString() &&
+								@if (Model.OrderHeader.PaymentStatus != PaymentStatus.Refunded.ToString() &&
 										Model.OrderHeader.OrderStatus != OrderStatus.Cancelled.ToString() &&
 								Model.OrderHeader.OrderStatus!=OrderStatus.Shipped.ToString())
 								{
@@ -271,25 +271,25 @@
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
 <script>
-	function validateInput(){
-		if(document.getElementById("trackingNumber").value==""){
-			Swal.fire({
-			  icon: 'error',
-			  title: 'Oops...',
-			  text: 'Please enter tracking number!',
-			});
-			return false;
-		}
-		if(document.getElementById("carrier").value==""){
-			Swal.fire({
-			  icon: 'error',
-			  title: 'Oops...',
-			  text: 'Please enter carrier!',
-			});
-			return false;
-		}
-		return true;
-	}
+function validateInput() {
+    if (document.getElementById("trackingNumber").value == "" || document.getElementById("trackingNumber").value == null) {
+        swal({
+            title: "Error",
+            text: "Please enter tracking number!",
+            icon: "error",
+        });
+        return false;
+    }
+    if (document.getElementById("carrier").value == "" || document.getElementById("carrier").value == null) {
+        swal({
+            title: "Error",
+            text: "Please enter tracking carrier!",
+            icon: "error",
+        });
+        return false;
+    }
+    return true;
+}
 </script>
 
 }

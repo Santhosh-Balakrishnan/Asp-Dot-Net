@@ -11,6 +11,7 @@ namespace BookShop.Utilities
         Pending,
         Approved,
         ApprovedForDelayedPayment,
-        Rejected
+        Rejected,
+        Refunded
     }
 }

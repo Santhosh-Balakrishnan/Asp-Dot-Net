@@ -36,4 +36,12 @@
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\Admin\Views\Order\PaymentConfirmation.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\Admin\Views\Order\PaymentConfirmation.cshtml" />
+  </ItemGroup>
+
 </Project>
