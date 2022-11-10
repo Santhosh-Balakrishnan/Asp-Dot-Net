@@ -127,13 +127,13 @@ namespace WebApplication1.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (!_roleManager.RoleExistsAsync(Role.Admin.ToString()).GetAwaiter().GetResult())
-            {
-                _roleManager.CreateAsync(new IdentityRole(Role.Admin.ToString())).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(Role.Individual.ToString())).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(Role.Company.ToString())).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(Role.Employee.ToString())).GetAwaiter().GetResult();
-            }
+            //if (!_roleManager.RoleExistsAsync(Role.Admin.ToString()).GetAwaiter().GetResult())
+            //{
+            //    _roleManager.CreateAsync(new IdentityRole(Role.Admin.ToString())).GetAwaiter().GetResult();
+            //    _roleManager.CreateAsync(new IdentityRole(Role.Individual.ToString())).GetAwaiter().GetResult();
+            //    _roleManager.CreateAsync(new IdentityRole(Role.Company.ToString())).GetAwaiter().GetResult();
+            //    _roleManager.CreateAsync(new IdentityRole(Role.Employee.ToString())).GetAwaiter().GetResult();
+            //}
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             Input = new InputModel()

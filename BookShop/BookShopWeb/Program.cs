@@ -1,3 +1,4 @@
+using BookShop.DataAcess.DbInitializer;
 using BookShop.DataAcess.Repository;
 using BookShop.DataAcess.Repository.IRepository;
 using BookShop.Utilities;
@@ -18,6 +19,7 @@ builder.Services.Configure<StripeSetting>(builder.Configuration.GetSection("Stri
 builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+builder.Services.AddScoped(typeof(IDbInitializer), typeof(DbInitializer));
 builder.Services.AddSingleton(typeof(IEmailSender), typeof(EmailSender));
 builder.Services.AddRazorPages();
 builder.Services.ConfigureApplicationCookie(options =>
@@ -42,6 +44,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+SeedDataBase();
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -51,3 +54,13 @@ app.MapControllerRoute(
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+void SeedDataBase()
+{
+    using(var scope=app.Services.CreateScope())
+    {
+        var dbInitializer=scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}
