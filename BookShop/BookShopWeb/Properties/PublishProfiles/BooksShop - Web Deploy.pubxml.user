@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA2EmVpLLnt0e/Vio9QhkZCgAAAAACAAAAAAAQZgAAAAEAACAAAACJbnQMHb7Cap0Piw/brpbyh6G2obzwWN86AZs7b0fU4gAAAAAOgAAAAAIAACAAAABeyR9owOVjyHXnivTQk7j3ugqNZtKX6FNkBjH/N2jADIAAAACm7j2yX5kOdtykw4xHwoqBTUvyThGZHEhneiLkEgZnXn/gctJljMfgJDK6JMUK3+jp4/0Jhi1ku/CgWHeFQLCd2mPN0jIhLE4aYcUOxk+qYOpUswo+RF1Td4z6DILlyXUEk5Um98uJzZWctSlS4z+Xk+2aXXq2r24yvlWenaVhgEAAAADQ73ejG/Qe44ipW26OEIPwshv6jEt7y4itfTFmHrtSW0WLZcer0Gow+XR/KL87/uUPVuSH5cRlpQfmqA9h2L3Q</EncryptedPassword>
+    <History>True|2022-11-10T16:33:57.8024738Z;True|2022-11-10T10:19:19.3040583-06:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=tcp:sample-bookshop.database.windows.net,1433%3bInitial Catalog=BookShop%3bPersist Security Info=False%3bUser ID=admin-sql%3bPassword=Login%40123%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

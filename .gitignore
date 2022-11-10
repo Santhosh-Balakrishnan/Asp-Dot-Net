@@ -12,3 +12,8 @@
 /BookShop/BookShop.Utilities/bin/Debug/net6.0
 /BookShop/BookShop.Models/bin/Debug/net6.0
 /BookShop/BookShop.DataAcess/bin/Debug/net6.0
+/.vs
+/BookShop/BookShopWeb/bin/Release/net6.0
+/BookShop/BookShop.DataAcess/bin/Release/net6.0
+/BookShop/BookShop.Models/bin/Release/net6.0
+/BookShop/BookShop.Utilities/bin/Release/net6.0
